@@ -29,7 +29,10 @@ const jumpHeight = 110;
 const ascentTime = 310;
 const descentTime = 280;
 
-const speed = 550;
+let speed = 450;
+
+const maxSpeed = 550;
+const acceleration = 0.01;
 
 const minSpawn = 650;
 const maxSpawn = 1000;
@@ -75,6 +78,8 @@ let foods = [];
 
 let nextSpawn = 0;
 let lastTime = 0;
+
+let groundX = 0;
 
 let nextFoodSpawn = 0;
 let lastFoodTime = 0;
@@ -202,7 +207,7 @@ function spawnFood() {
       (maxFoodCount - minFoodCount + 1)
     ) + minFoodCount;
 
-  const foodSpacing = 35;
+  const foodSpacing = 50;
 
   let startPosition = 850;
   let bottom = Math.random() < 0.5 ? 220 : 100;
@@ -477,7 +482,12 @@ function moveObstacles() {
         Math.random() *
         (maxSpawn - minSpawn);
     }
-  }
+    
+    speed = Math.min(
+  speed + acceleration * dt * 60,
+  maxSpeed
+  ); 
+}
 
 
   /* Pohyb */
@@ -488,6 +498,17 @@ function moveObstacles() {
     o.element.style.transform =
       `translateX(${o.position - 850}px)`;
   });
+  
+  /* Pohyb dna */
+
+groundX -= speed * dt;
+
+if (groundX <= -512) {
+  groundX += 512;
+}
+
+ground.style.backgroundPosition =
+  `${groundX}px bottom`;
 
 
   /* Odstranění starých */
@@ -625,9 +646,9 @@ function checkFoodCollision() {
 requestAnimationFrame(checkFoodCollision);
 
 
-/* ==========================
-   KOLIZE
-   ========================== */
+// ==========================
+// KOLIZE
+// ==========================
 
 function checkCollision() {
 
@@ -636,12 +657,189 @@ function checkCollision() {
     !paused &&
     !gameOverState
   ) {
+
     const d =
       discus.getBoundingClientRect();
 
     for (const o of obstacles) {
+
       const r =
         o.element.getBoundingClientRect();
+
+
+      // ==========================
+      // ROSTLINA
+      // ==========================
+
+      if (
+        o.element.classList.contains("plant")
+      ) {
+
+        /*
+          Rostlina má nepravidelný tvar.
+          Proto nepoužíváme celý obdélník
+          70 × 110 px.
+
+          Body jsou uvnitř skutečného
+          tvaru rostliny.
+
+          Okolo obrázku je přibližně
+          5 px bezpečnostní mezera.
+        */
+
+        const plantPolygon = [
+
+          { x: 0.45, y: 1.00 },
+          { x: 0.30, y: 0.88 },
+          { x: 0.34, y: 0.72 },
+          { x: 0.25, y: 0.60 },
+
+          { x: 0.38, y: 0.50 },
+          { x: 0.30, y: 0.34 },
+
+          { x: 0.46, y: 0.42 },
+          { x: 0.48, y: 0.20 },
+
+          { x: 0.55, y: 0.38 },
+          { x: 0.65, y: 0.10 },
+
+          { x: 0.68, y: 0.34 },
+          { x: 0.80, y: 0.20 },
+
+          { x: 0.73, y: 0.44 },
+          { x: 0.88, y: 0.36 },
+
+          { x: 0.77, y: 0.58 },
+          { x: 0.84, y: 0.73 },
+
+          { x: 0.70, y: 0.78 },
+          { x: 0.64, y: 1.00 }
+        ];
+
+
+        // ==========================
+        // PŘEVOD BODŮ NA OBRAZOVKU
+        // ==========================
+
+        const polygon = plantPolygon.map(p => ({
+          x: r.left + p.x * r.width,
+          y: r.top + p.y * r.height
+        }));
+
+
+        // ==========================
+        // TEST BODU V POLYGONU
+        // ==========================
+
+        function pointInPolygon(x, y, polygon) {
+
+          let inside = false;
+
+          for (
+            let i = 0, j = polygon.length - 1;
+            i < polygon.length;
+            j = i++
+          ) {
+
+            const xi = polygon[i].x;
+            const yi = polygon[i].y;
+
+            const xj = polygon[j].x;
+            const yj = polygon[j].y;
+
+
+            const intersect =
+              ((yi > y) !== (yj > y)) &&
+              (
+                x <
+                (xj - xi) *
+                (y - yi) /
+                (yj - yi) +
+                xi
+              );
+
+            if (intersect) {
+
+              inside = !inside;
+            }
+          }
+
+          return inside;
+        }
+
+
+        // ==========================
+        // BODY TERČOVCE
+        // ==========================
+
+        const discusPoints = [
+
+          { x: d.left + 5, y: d.top + 5 },
+
+          {
+            x: d.right - 5,
+            y: d.top + 5
+          },
+
+          {
+            x: d.left + 5,
+            y: d.bottom - 5
+          },
+
+          {
+            x: d.right - 5,
+            y: d.bottom - 5
+          },
+
+          {
+            x: (d.left + d.right) / 2,
+            y: (d.top + d.bottom) / 2
+          }
+        ];
+
+
+        // ==========================
+        // KOLIZE S ROSTLINOU
+        // ==========================
+
+        let plantCollision = false;
+
+        for (const point of discusPoints) {
+
+          if (
+            pointInPolygon(
+              point.x,
+              point.y,
+              polygon
+            )
+          ) {
+
+            plantCollision = true;
+            break;
+          }
+        }
+
+
+        if (plantCollision) {
+
+          endGame(
+            "Terčovec se schoval mezi rostliny a odmítá vyplout."
+          );
+
+          break;
+        }
+
+
+        // Rostlina je vyřešena,
+        // nepoužívat na ni obdélníkovou kolizi.
+
+        continue;
+      }
+
+
+      // ==========================
+      // OSTATNÍ PŘEKÁŽKY
+      // ==========================
 
       const overlapX =
         Math.min(d.right, r.right) -
@@ -651,45 +849,45 @@ function checkCollision() {
         Math.min(d.bottom, r.bottom) -
         Math.max(d.top, r.top);
 
+
       const collision =
-        overlapX >= 15 &&
-        overlapY >= 10;
+        overlapX >= 25 &&
+        overlapY >= 25;
 
-      if (!collision) {
-        continue;
+
+      if (collision) {
+
+        if (
+          o.element.classList.contains("rock")
+        ) {
+
+          endGame(
+            "Au! Terčovec narazil do kamene!"
+          );
+        }
+
+        else if (
+          o.element.classList.contains("net")
+        ) {
+
+          endGame(
+            "Terčovec je v pasti!"
+          );
+        }
+
+        break;
       }
-
-      if (o.element.classList.contains("rock")) {
-        endGame(
-          "Au! Terčovec narazil do kamene!"
-        );
-      }
-
-      else if (
-        o.element.classList.contains("plant")
-      ) {
-        endGame(
-          "Terčovec se schoval mezi rostliny a odmítá vyplout."
-        );
-      }
-
-      else if (
-        o.element.classList.contains("net")
-      ) {
-        endGame(
-          "Terčovec je v pasti!"
-        );
-      }
-
-      break;
     }
   }
 
-  requestAnimationFrame(checkCollision);
+  requestAnimationFrame(
+    checkCollision
+  );
 }
 
-requestAnimationFrame(checkCollision);
-
+requestAnimationFrame(
+  checkCollision
+);
 
 /* ==========================
    RESET HRY
@@ -739,6 +937,7 @@ function reset() {
 
   /* Časovače */
 
+  speed = 450;
   lastTime = performance.now();
   lastFoodTime = performance.now();
 }
