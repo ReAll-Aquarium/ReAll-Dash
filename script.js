@@ -1515,7 +1515,9 @@ function updateFullscreenScale() {
   */
 
   const scale =
-    Math.min(scaleX, scaleY);
+  Math.floor(
+    Math.min(scaleX, scaleY)
+  );
 
 
   game.style.setProperty(
