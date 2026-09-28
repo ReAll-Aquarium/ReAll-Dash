@@ -909,8 +909,8 @@ const discusPoints = [
 
 
       const collision =
-        overlapX >= 25 &&
-        overlapY >= 25;
+        overlapX >= 35 &&
+        overlapY >= 35;
 
 
       if (collision) {
