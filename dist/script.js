@@ -1163,6 +1163,8 @@ pauseButton.addEventListener(
    ========================== */
 
 function drawPixelText() {
+  
+    return;
 
   /* ==========================
      POMOCNÁ FUNKCE
