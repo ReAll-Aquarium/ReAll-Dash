@@ -1425,7 +1425,10 @@ gameOverScore.style.display = "none";
 playButton.textContent = "PLAY";
 
 /* ReAll Dash znovu vykreslit */
-document.fonts.ready.then(() => {
+Promise.all([
+  document.fonts.load("900 45px Mirza"),
+  document.fonts.load("400 italic 33px 'Changa One'")
+]).then(() => {
   drawPixelText();
 });
 
@@ -1598,6 +1601,9 @@ window.addEventListener(
   }
 );
 
-document.fonts.ready.then(() => {
+Promise.all([
+  document.fonts.load("900 45px Mirza"),
+  document.fonts.load("400 italic 33px 'Changa One'")
+]).then(() => {
   drawPixelText();
 });
