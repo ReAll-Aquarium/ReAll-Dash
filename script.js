@@ -529,7 +529,7 @@ if (groundX <= -512) {
 }
 
 ground.style.backgroundPosition =
-  `${groundX}px bottom`;
+  `${Math.round(groundX)}px bottom`;
 
 
   /* Odstranění starých */
@@ -1465,130 +1465,44 @@ Promise.all([
 
 
 /* ==========================
-   FULLSCREEN MĚŘÍTKO
+   RESPONSIVNÍ MĚŘÍTKO HRY
    ========================== */
 
-function updateFullscreenScale() {
+function fitGame() {
 
-  if (!document.fullscreenElement) {
+  const viewportWidth =
+    window.visualViewport
+      ? window.visualViewport.width
+      : window.innerWidth;
 
-    game.style.removeProperty("--game-scale");
+  const viewportHeight =
+    window.visualViewport
+      ? window.visualViewport.height
+      : window.innerHeight;
 
-    return;
-  }
-
-
-  const screenWidth =
-    window.innerWidth;
-
-  const screenHeight =
-    window.innerHeight;
-
-
-  /*
-     Vnitřní hra má 800 × 400 px.
-     Border je 4 px na každé straně.
-  */
-
-  const gameOuterWidth =
-    GAME_WIDTH + 8;
-
-  const gameOuterHeight =
-    GAME_HEIGHT + 8;
-
-
-  /*
-     Vypočítáme, kolikrát můžeme
-     hru zvětšit, aby se celá vešla.
-  */
 
   const scaleX =
-    screenWidth / gameOuterWidth;
+    viewportWidth / GAME_WIDTH;
 
   const scaleY =
-    screenHeight / gameOuterHeight;
+    viewportHeight / GAME_HEIGHT;
 
-
-  /*
-     Použijeme menší hodnotu,
-     aby se nic neořízlo.
-  */
 
   const scale =
-  Math.floor(
-    Math.min(scaleX, scaleY)
-  );
+    Math.min(scaleX, scaleY);
 
 
-  /*game.style.setProperty(
-    "--game-scale",
-    scale
-  );
-  */
+  game.style.transform =
+    `scale(${scale})`;
+
 }
 
 
 /* ==========================
-   FULLSCREEN
+   PŘI NAČTENÍ
    ========================== */
 
-fullscreenButton.addEventListener(
-  "click",
-  async function(event) {
-
-    event.preventDefault();
-    event.stopPropagation();
-
-
-    try {
-
-      if (!document.fullscreenElement) {
-
-        await gameViewport.requestFullscreen();
-
-      }
-
-      else {
-
-        await document.exitFullscreen();
-
-      }
-
-    }
-
-    catch (error) {
-
-      console.log(
-        "Fullscreen se nepodařilo změnit:",
-        error
-      );
-
-    }
-
-  }
-);
-
-
-/* ==========================
-   ZMĚNA FULLSCREEN STAVU
-   ========================== */
-
-document.addEventListener(
-  "fullscreenchange",
-  function() {
-
-    /*
-       Po vstupu do fullscreen
-       chvíli počkáme, aby už měl
-       prohlížeč správnou velikost.
-    */
-
-    requestAnimationFrame(
-      updateFullscreenScale
-    );
-
-  }
-);
+fitGame();
 
 
 /* ==========================
@@ -1597,12 +1511,22 @@ document.addEventListener(
 
 window.addEventListener(
   "resize",
-  function() {
-
-    updateFullscreenScale();
-
-  }
+  fitGame
 );
+
+
+/* ==========================
+   iOS / iPadOS
+   ========================== */
+
+if (window.visualViewport) {
+
+  window.visualViewport.addEventListener(
+    "resize",
+    fitGame
+  );
+
+}
 
 Promise.all([
   document.fonts.load("900 45px Mirza"),
