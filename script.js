@@ -789,33 +789,71 @@ function checkCollision() {
 
 
         // ==========================
-        // BODY TERČOVCE
-        // ==========================
+// BODY TERČOVCE
+// ==========================
 
-        const discusPoints = [
+const discusPoints = [
 
-          { x: d.left + 5, y: d.top + 5 },
+  // horní část těla
+  {
+    x: d.left + d.width * 0.30,
+    y: d.top + d.height * 0.20
+  },
 
-          {
-            x: d.right - 5,
-            y: d.top + 5
-          },
+  {
+    x: d.left + d.width * 0.50,
+    y: d.top + d.height * 0.12
+  },
 
-          {
-            x: d.left + 5,
-            y: d.bottom - 5
-          },
+  {
+    x: d.left + d.width * 0.68,
+    y: d.top + d.height * 0.20
+  },
 
-          {
-            x: d.right - 5,
-            y: d.bottom - 5
-          },
+  // pravá část těla – ne až úplně do ocasu
+  {
+    x: d.left + d.width * 0.73,
+    y: d.top + d.height * 0.40
+  },
 
-          {
-            x: (d.left + d.right) / 2,
-            y: (d.top + d.bottom) / 2
-          }
-        ];
+  {
+    x: d.left + d.width * 0.73,
+    y: d.top + d.height * 0.60
+  },
+
+  // spodní část těla
+  {
+    x: d.left + d.width * 0.65,
+    y: d.top + d.height * 0.80
+  },
+
+  {
+    x: d.left + d.width * 0.50,
+    y: d.top + d.height * 0.88
+  },
+
+  {
+    x: d.left + d.width * 0.32,
+    y: d.top + d.height * 0.80
+  },
+
+  // levá část těla
+  {
+    x: d.left + d.width * 0.27,
+    y: d.top + d.height * 0.60
+  },
+
+  {
+    x: d.left + d.width * 0.27,
+    y: d.top + d.height * 0.40
+  },
+
+  // střed
+  {
+    x: d.left + d.width * 0.50,
+    y: d.top + d.height * 0.50
+  }
+];
 
 
         // ==========================
