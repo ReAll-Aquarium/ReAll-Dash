@@ -10,7 +10,6 @@ const food = document.getElementById("food");
 const startScreen = document.getElementById("startScreen");
 const playButton = document.getElementById("playButton");
 const pauseButton = document.getElementById("pauseButton");
-const fullscreenButton = document.getElementById("fullscreenButton");
 
 const scoreDisplay = document.getElementById("score");
 const gameOverScore = document.getElementById("gameOverScore");
@@ -1100,13 +1099,12 @@ document.addEventListener(
   "touchstart",
   event => {
 
-    if (
-      event.target.closest("#playButton") ||
-      event.target.closest("#pauseButton") ||
-      event.target.closest("#fullscreenButton")
-    ) {
-      return;
-    }
+     if (
+  event.target.closest("#playButton") ||
+  event.target.closest("#pauseButton")
+) {
+  return;
+}
 
     if (
       !started ||
@@ -1157,241 +1155,6 @@ pauseButton.addEventListener(
   togglePause
 );
 
-
-/* ==========================
-   PIXELOVÝ TEXT
-   ========================== */
-
-function drawPixelText() {
-  
-    return;
-
-  /* ==========================
-     POMOCNÁ FUNKCE
-     ODSTRANÍ ANTIALIASING
-     ========================== */
-
- 
-  function makeHardPixels(canvas) {
-
-  const ctx = canvas.getContext("2d");
-
-  const image =
-    ctx.getImageData(
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
-
-  const data = image.data;
-
-  for (let i = 0; i < data.length; i += 4) {
-
-    const r = data[i];
-    const g = data[i + 1];
-    const b = data[i + 2];
-    const alpha = data[i + 3];
-
-    /* ==========================
-       PRÁZDNÉ PIXELY
-       ========================== */
-
-    if (alpha < 30) {
-
-      data[i + 3] = 0;
-
-      continue;
-    }
-
-
-    /* ==========================
-       ROZLIŠENÍ BÍLÉ / TMAVÉ
-       ========================== */
-
-    const brightness =
-      (r + g + b) / 3;
-
-
-    if (brightness > 120) {
-
-      /*
-         BÍLÝ PIXEL
-      */
-
-      data[i] = 255;
-      data[i + 1] = 255;
-      data[i + 2] = 255;
-      data[i + 3] = 255;
-
-    } else {
-
-      /*
-         TMAVÝ OBRYS
-      */
-
-      data[i] = 17;
-      data[i + 1] = 18;
-      data[i + 2] = 23;
-      data[i + 3] = 255;
-    }
-  }
-
-  ctx.putImageData(
-    image,
-    0,
-    0
-  );
-}
-  
-
-/* ==========================
-   REALL DASH
-   ========================== */
-
-const titleCanvas =
-  document.getElementById("pixelTitle");
-
-const titleCtx =
-  titleCanvas.getContext("2d");
-
-titleCanvas.width = 240;
-titleCanvas.height = 55;
-
-titleCtx.imageSmoothingEnabled = false;
-
-titleCtx.clearRect(
-  0,
-  0,
-  240,
-  55
-);
-
-titleCtx.fillStyle = "white";
-titleCtx.textBaseline = "middle";
-  
-  function drawTitleOutline(ctx, x, y, text, font) {
-  ctx.font = font;
-  ctx.fillStyle = "#111217";
-
-const offsets = [
-  [-2, -2], [0, -2], [2, -2],
-  [-2,  0],           [2,  0],
-  [-2,  2], [0,  2], [2,  2]
-];
-
-offsets.forEach(([ox, oy]) => {
-  ctx.fillText(
-    text,
-    x + ox,
-    y + oy
-  );
-});
-}
-
-/* ==========================
-   FONTY
-   ========================== */
-
-titleCtx.font =
-  "900 45px Mirza";
-
-const reallWidth =
-  titleCtx.measureText("ReAll").width;
-
-
-titleCtx.font =
-  "400 italic 33px 'Changa One'";
-
-const dashWidth =
-  titleCtx.measureText("Dash").width;
-
-
-/* ==========================
-   MEZERA
-   ========================== */
-
-const gap = 10;
-
-
-/* ==========================
-   CELKOVÁ ŠÍŘKA
-   ========================== */
-
-const totalWidth =
-  reallWidth +
-  gap +
-  dashWidth;
-
-
-/* ==========================
-   VYROVNÁNÍ NA STŘED
-   ========================== */
-
-const startX =
-  (240 - totalWidth) / 2;
-
-
-/* ==========================
-   ReAll
-   ========================== */
-
-titleCtx.font =
-  "900 45px Mirza";
-
-drawTitleOutline(
-  titleCtx,
-  startX,
-  22,
-  "ReAll",
-  "900 45px Mirza"
-);
-
-titleCtx.fillStyle = "white";
-
-titleCtx.fillText(
-  "ReAll",
-  startX,
-  22
-);
-
-
-/* ==========================
-   Dash
-   ========================== */
-
-titleCtx.font =
-  "400 italic 33px 'Changa One'";
-
-const dashX =
-  startX + reallWidth + gap;
-
-drawTitleOutline(
-  titleCtx,
-  dashX,
-  25,
-  "Dash",
-  "400 italic 33px 'Changa One'"
-);
-
-titleCtx.fillStyle = "white";
-
-titleCtx.fillText(
-  "Dash",
-  dashX,
-  25
-);
-
-
-/* ==========================
-   TVRDÉ PIXELY
-   ========================== */
-
-makeHardPixels(titleCanvas);
-  
-}
-
-
 /* ==========================
    PLAY
    ========================== */
@@ -1409,44 +1172,30 @@ playButton.addEventListener(
 
     startScreen.classList.remove("gameOverMode");
 
-  /* ==========================
-   OBNOVENÍ START OBRAZOVKY
-   ========================== */
+    /* ==========================
+       OBNOVENÍ START OBRAZOVKY
+       ========================== */
 
-/* ReAll Dash zobrazit */
-gameTitle.style.display = "block";
+    gameTitle.style.display = "block";
 
-/* GAME OVER schovat */
-gameOverTitle.style.display = "none";
+    gameOverTitle.style.display = "none";
 
-/* Skóre schovat */
-gameOverScore.textContent = "";
-gameOverScore.style.display = "none";
+    gameOverScore.textContent = "";
+    gameOverScore.style.display = "none";
 
-/* Text tlačítka */
-playButton.textContent = "PLAY";
-
-/* ReAll Dash znovu vykreslit */
-Promise.all([
-  document.fonts.load("900 45px Mirza"),
-  document.fonts.load("400 italic 33px 'Changa One'")
-]).then(() => {
-  drawPixelText();
-});
+    playButton.textContent = "PLAY";
 
 
     /* Reset */
 
     reset();
 
-    score = 0;
-    bonusScore = 0;
-
     scoreStartTime =
       performance.now();
 
     scoreDisplay.textContent = "0";
     scoreDisplay.style.display = "block";
+
 
     /* Pauza */
 
@@ -1464,7 +1213,6 @@ Promise.all([
     startScreen.style.display = "none";
   }
 );
-
 
 /* ==========================
    RESPONSIVNÍ MĚŘÍTKO HRY
@@ -1524,10 +1272,3 @@ if (window.visualViewport) {
   );
 
 }
-
-Promise.all([
-  document.fonts.load("900 45px Mirza"),
-  document.fonts.load("400 italic 33px 'Changa One'")
-]).then(() => {
-  drawPixelText();
-});
