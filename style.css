@@ -872,17 +872,3 @@ background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAOCAY
 #startScreen.gameOverMode #playButtonFrame {
   top: -12px;
 }
-
-/* ==========================
-   MOBILNÍ ZOBRAZENÍ
-   ========================== */
-
-@media (max-width: 820px) {
-
-  #game {
-    transform: scale(
-      calc((100vw - 20px) / 808)
-    );
-  }
-
-}
