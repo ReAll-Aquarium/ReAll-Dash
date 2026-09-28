@@ -1471,14 +1471,10 @@ Promise.all([
 function fitGame() {
 
   const viewportWidth =
-    window.visualViewport
-      ? window.visualViewport.width
-      : window.innerWidth;
+    gameViewport.clientWidth;
 
   const viewportHeight =
-    window.visualViewport
-      ? window.visualViewport.height
-      : window.innerHeight;
+    gameViewport.clientHeight;
 
 
   const scaleX =
@@ -1496,7 +1492,6 @@ function fitGame() {
     `scale(${scale})`;
 
 }
-
 
 /* ==========================
    PŘI NAČTENÍ
