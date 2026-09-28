@@ -4,21 +4,26 @@
 
     <div id="startScreen">
 
+      <!-- ReAll Dash -->
       <div class="gameTitle" id="gameTitle">
-        <span class="reallText">ReAll</span><span class="runText"> Dash</span>
+        <canvas id="pixelTitle"></canvas>
       </div>
 
-      <div class="gameSubtitle" id="gameSubtitle">
-        přeplav akvárium!
+      <!-- GAME OVER -->
+      <div class="gameOverTitle" id="gameOverTitle">
+        GAME OVER
       </div>
 
       <div id="gameOverScore"></div>
 
-      <button id="playButton">
-        HRÁT
-      </button>
+      <div id="playButtonFrame">
+        <button id="playButton">
+          PLAY
+        </button>
+      </div>
 
     </div>
+
 
     <div id="discus"></div>
     <div id="rock"></div>
@@ -27,13 +32,14 @@
     <div id="food"></div>
     <div id="ground"></div>
 
-<button id="fullscreenButton" aria-label="Fullscreen">
-  <span class="fullscreenIcon"></span>
-</button>
 
-<button id="pauseButton" aria-label="Pauza">
-  <span class="pauseIcon"></span>
-</button>
+    <button id="fullscreenButton" aria-label="Fullscreen">
+      <span class="fullscreenIcon"></span>
+    </button>
+
+    <button id="pauseButton" aria-label="Pauza">
+      <span class="pauseIcon"></span>
+    </button>
 
     <div id="score">0</div>
 
