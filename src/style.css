@@ -159,7 +159,7 @@ background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAVCAY
 
   background-repeat: repeat-x;
   background-position: bottom left;
-  background-size: 512px 76px;
+  background-size: auto 76px;
 
   image-rendering: pixelated;
   image-rendering: crisp-edges;
