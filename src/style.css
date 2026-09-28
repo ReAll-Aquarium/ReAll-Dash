@@ -150,30 +150,6 @@ background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAVCAY
    PIXELOVÝ OUTLINE PÍSKU
    ========================== */
 
-#ground::before {
-  content: "";
-
-  position: absolute;
-  inset: 0;
-
-  background-image: inherit;
-  background-repeat: inherit;
-  background-position: inherit;
-  background-size: inherit;
-
-  pointer-events: none;
-
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
-
-  filter:
-    drop-shadow(3px 0 0 #111217)
-    drop-shadow(-3px 0 0 #111217)
-    drop-shadow(0 3px 0 #111217)
-    drop-shadow(0 -3px 0 #111217);
-
-  z-index: -1;
-}
 
 
 /* ==========================
