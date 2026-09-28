@@ -145,6 +145,58 @@ background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAVCAY
   z-index: 10;
 }
 
+#ground::before {
+  content: "";
+
+  position: absolute;
+  left: 0;
+  bottom: 0;
+
+  width: 1024px;
+  height: 76px;
+
+      background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAATCAYAAABYzAUmAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAGHaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8P3hwYWNrZXQgYmVnaW49J++7vycgaWQ9J1c1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCc/Pg0KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyI+PHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj48cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0idXVpZDpmYWY1YmRkNS1iYTNkLTExZGEtYWQzMS1kMzNkNzUxODJmMWIiIHhtbG5zOnRpZmY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vdGlmZi8xLjAvIj48dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPjwvcmRmOkRlc2NyaXB0aW9uPjwvcmRmOlJERj48L3g6eG1wbWV0YT4NCjw/eHBhY2tldCBlbmQ9J3cnPz4slJgLAAADnElEQVRoQ+2YvWsUURTFz0SxM6Cg1QZJuZBK4heC2EStFSysRKz9B9LYpLWwTmGVP0Cssk2IhSmCWAxMGWSnCiHF2kkgNjnjnbP3zryd3Yia/CDs3PfuPffjvZ2FZHA4Otw6tvbFqw8za3flb9a1Gl3iPWZR1yTYfMPdARYfrbXmy+AUOtwdWBMLyys122vEG+Ckumgp3NNbWF6pdMu8QG+pX9Ntq5XY2ry6PB1FdVP6jXT3NleP6R/5zCJfpiJwhIgnmIoeliXS1YtEDUU1PZ822i4A0QHq/Lwaqc3+dZ8+3rpluDtAmRe49/KNbgHOHIinyz6yo8Ot4yiwCSvK+DIvAAC9pX61l0LbxYj2dN1bI169XdBhRlqcBRLnkVLfpLmb8lJrzh4eF8u8qDWwsf77BttD4R/pLfXDpIyzOWgPE24/ZKgW1qUX0eLVq31qDbZfwnjVgfhzFtE8PLwD5exheuCzx8LySpXX1qO9UCvb21wd+wnw4O8rzKHxdRQVgyDO27d+3r5lY32AB3d7jXE4yfflw/twP5Uoh66rHRH5bawP8OK1/0WIYiwpPkrtAtjBRvC2W5+mwomNSynU+ng5Leob+fHb5NWqlwpBvjIvsL1TuhqkKU9qrd6et8Z1SL30tTHeOWWf3z1NegPoYLznCDswWxj3dPBoGH4b1KFuF7xaon6nyWcPSPU1j6Vpj6iPlwMALrx63H+Lk4O40ZsHn7+Xo5p95dLPsWcAGO0fVOv0V+4/uYMyL/Dp4zfc6M1XMQCqGLtGe7R/gPnr11Dmxdi+wvz0s/W3obVrLtatvcP4NuXTeRLG2nyj/YOxeeu5aA0WnYPaMP1A3wDbOyUAhDeZt9x+wvi32YTx+qx2FK9Yv0iPPvRri0tF61UN3YfkT9nrQqSnn3MSV8MODQkHcZpoLR4pPqeNrWHaQ5yG1LzZ2vPb1RuAN2MaZqHxJ9F62+x/laiP2htAG+9CqsbXvR+6NEaKj8Xz99YsOpQm2+unTX/WeDUgoQ7ti4Q/AQywwlGSaF2TWr+bi5fDOF2nrZ98jvxxkifaa8Lz034UL4Z4tdPWfrx1Ymvw+oziiNYxR6MpiLQNU8U93ZSiNY8y6b7Vt3s2Z1SDV7+3hiCvEl18XfPqbMqtaG8K9d03gAZ4tq5ZdBCTMImu56trahNd9wbeBW82amsfFm8vujTq6/kgiKedPbvVT/pH0Dn/J+4b4Jyzw/kFOOP8AggSqfqOzP4eAAAAAElFTkSuQmCC");
+
+  background-repeat: repeat-x;
+  background-position: bottom left;
+  background-size: 512px 76px;
+
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+
+  pointer-events: none;
+}
+
+
+/* ==========================
+   PIXELOVÝ OUTLINE PÍSKU
+   ========================== */
+
+#ground::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background-image: inherit;
+  background-repeat: inherit;
+  background-position: inherit;
+  background-size: inherit;
+
+  pointer-events: none;
+
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+
+  filter:
+    drop-shadow(3px 0 0 #111217)
+    drop-shadow(-3px 0 0 #111217)
+    drop-shadow(0 3px 0 #111217)
+    drop-shadow(0 -3px 0 #111217);
+
+  z-index: -1;
+}
+
 
 /* ==========================
    ROCK
