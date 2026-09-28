@@ -1359,7 +1359,7 @@ titleCtx.fillText(
    ========================== */
 
 titleCtx.font =
-  "100 italic 33px 'Changa One'";
+  "400 italic 33px 'Changa One'";
 
 const dashX =
   startX + reallWidth + gap;
@@ -1425,7 +1425,9 @@ gameOverScore.style.display = "none";
 playButton.textContent = "PLAY";
 
 /* ReAll Dash znovu vykreslit */
-drawPixelText();
+document.fonts.ready.then(() => {
+  drawPixelText();
+});
 
 
     /* Reset */

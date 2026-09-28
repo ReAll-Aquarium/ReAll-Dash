@@ -14,6 +14,8 @@ const fullscreenButton = document.getElementById("fullscreenButton");
 
 const scoreDisplay = document.getElementById("score");
 const gameOverScore = document.getElementById("gameOverScore");
+const gameOverTitle =
+  document.getElementById("gameOverTitle");
 
 
 /* ==========================
@@ -29,13 +31,13 @@ const jumpHeight = 110;
 const ascentTime = 310;
 const descentTime = 280;
 
-let speed = 450;
+let speed = 350;
+const startSpeed = 350;
+const maxSpeed = 600;
+const acceleration = 0.2;
 
-const maxSpeed = 550;
-const acceleration = 0.01;
-
-const minSpawn = 650;
-const maxSpawn = 1000;
+const startMinSpawn = 850;
+const startMaxSpawn = 1500;
 
 const foodValue = 3;
 const minFoodCount = 1;
@@ -472,22 +474,41 @@ function moveObstacles() {
 
   /* Nová překážka */
 
-  if (now >= nextSpawn) {
+if (now >= nextSpawn) {
     const spawned = spawn();
 
     if (spawned) {
-      nextSpawn =
-        now +
-        minSpawn +
-        Math.random() *
-        (maxSpawn - minSpawn);
+
+        const speedRatio =
+            speed / startSpeed;
+
+        const currentMinSpawn =
+            Math.max(
+                500,
+                startMinSpawn / speedRatio
+            );
+
+        const currentMaxSpawn =
+            Math.max(
+                850,
+                startMaxSpawn / speedRatio
+            );
+
+        nextSpawn =
+            now +
+            currentMinSpawn +
+            Math.random() *
+            (currentMaxSpawn - currentMinSpawn);
     }
-    
-    speed = Math.min(
-  speed + acceleration * dt * 60,
-  maxSpeed
-  ); 
 }
+
+
+/* Postupné zrychlování */
+
+speed = Math.min(
+    speed + acceleration * dt * 60,
+    maxSpeed
+);
 
 
   /* Pohyb */
@@ -823,7 +844,7 @@ function checkCollision() {
         if (plantCollision) {
 
           endGame(
-            "Terčovec se schoval mezi rostliny a odmítá vyplout."
+            "Terčovec se schoval mezi rostliny a odmítá vyplout!"
           );
 
           break;
@@ -871,7 +892,7 @@ function checkCollision() {
         ) {
 
           endGame(
-            "Terčovec je v pasti!"
+            "Terčovec byl chycen do síťky a míří k pokladně!"
           );
         }
 
@@ -937,7 +958,7 @@ function reset() {
 
   /* Časovače */
 
-  speed = 450;
+  speed = startSpeed;
   lastTime = performance.now();
   lastFoodTime = performance.now();
 }
@@ -972,25 +993,25 @@ function endGame(message) {
 
   /* Game over obrazovka */
 
+  scoreDisplay.style.display = "none";
+  
+  startScreen.classList.add("gameOverMode");
   startScreen.style.display = "flex";
 
-  const gameTitle =
-    document.querySelector(".gameTitle");
+/* GAME OVER titul */
 
-  gameTitle.textContent = "GAME OVER";
-  gameTitle.classList.add("gameOver");
+gameTitle.style.display = "none";
 
-  document.querySelector(".gameSubtitle")
-    .style.display = "none";
+gameOverTitle.style.display = "block";
 
-  gameOverScore.textContent =
-    "SKÓRE: " + finalScore;
+gameOverScore.textContent =
+  "SKÓRE: " + finalScore;
 
-  gameOverScore.style.display = "block";
+gameOverScore.style.display = "block";
 
   alert(message);
 
-  playButton.textContent = "HRÁT ZNOVU";
+  playButton.textContent = "PLAY AGAIN";
 
   started = false;
 }
@@ -1138,6 +1159,238 @@ pauseButton.addEventListener(
 
 
 /* ==========================
+   PIXELOVÝ TEXT
+   ========================== */
+
+function drawPixelText() {
+
+  /* ==========================
+     POMOCNÁ FUNKCE
+     ODSTRANÍ ANTIALIASING
+     ========================== */
+
+ 
+  function makeHardPixels(canvas) {
+
+  const ctx = canvas.getContext("2d");
+
+  const image =
+    ctx.getImageData(
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+  const data = image.data;
+
+  for (let i = 0; i < data.length; i += 4) {
+
+    const r = data[i];
+    const g = data[i + 1];
+    const b = data[i + 2];
+    const alpha = data[i + 3];
+
+    /* ==========================
+       PRÁZDNÉ PIXELY
+       ========================== */
+
+    if (alpha < 30) {
+
+      data[i + 3] = 0;
+
+      continue;
+    }
+
+
+    /* ==========================
+       ROZLIŠENÍ BÍLÉ / TMAVÉ
+       ========================== */
+
+    const brightness =
+      (r + g + b) / 3;
+
+
+    if (brightness > 120) {
+
+      /*
+         BÍLÝ PIXEL
+      */
+
+      data[i] = 255;
+      data[i + 1] = 255;
+      data[i + 2] = 255;
+      data[i + 3] = 255;
+
+    } else {
+
+      /*
+         TMAVÝ OBRYS
+      */
+
+      data[i] = 17;
+      data[i + 1] = 18;
+      data[i + 2] = 23;
+      data[i + 3] = 255;
+    }
+  }
+
+  ctx.putImageData(
+    image,
+    0,
+    0
+  );
+}
+  
+
+/* ==========================
+   REALL DASH
+   ========================== */
+
+const titleCanvas =
+  document.getElementById("pixelTitle");
+
+const titleCtx =
+  titleCanvas.getContext("2d");
+
+titleCanvas.width = 240;
+titleCanvas.height = 55;
+
+titleCtx.imageSmoothingEnabled = false;
+
+titleCtx.clearRect(
+  0,
+  0,
+  240,
+  55
+);
+
+titleCtx.fillStyle = "white";
+titleCtx.textBaseline = "middle";
+  
+  function drawTitleOutline(ctx, x, y, text, font) {
+  ctx.font = font;
+  ctx.fillStyle = "#111217";
+
+const offsets = [
+  [-2, -2], [0, -2], [2, -2],
+  [-2,  0],           [2,  0],
+  [-2,  2], [0,  2], [2,  2]
+];
+
+offsets.forEach(([ox, oy]) => {
+  ctx.fillText(
+    text,
+    x + ox,
+    y + oy
+  );
+});
+}
+
+/* ==========================
+   FONTY
+   ========================== */
+
+titleCtx.font =
+  "900 45px Mirza";
+
+const reallWidth =
+  titleCtx.measureText("ReAll").width;
+
+
+titleCtx.font =
+  "400 italic 33px 'Changa One'";
+
+const dashWidth =
+  titleCtx.measureText("Dash").width;
+
+
+/* ==========================
+   MEZERA
+   ========================== */
+
+const gap = 10;
+
+
+/* ==========================
+   CELKOVÁ ŠÍŘKA
+   ========================== */
+
+const totalWidth =
+  reallWidth +
+  gap +
+  dashWidth;
+
+
+/* ==========================
+   VYROVNÁNÍ NA STŘED
+   ========================== */
+
+const startX =
+  (240 - totalWidth) / 2;
+
+
+/* ==========================
+   ReAll
+   ========================== */
+
+titleCtx.font =
+  "900 45px Mirza";
+
+drawTitleOutline(
+  titleCtx,
+  startX,
+  22,
+  "ReAll",
+  "900 45px Mirza"
+);
+
+titleCtx.fillStyle = "white";
+
+titleCtx.fillText(
+  "ReAll",
+  startX,
+  22
+);
+
+
+/* ==========================
+   Dash
+   ========================== */
+
+titleCtx.font =
+  "400 italic 33px 'Changa One'";
+
+const dashX =
+  startX + reallWidth + gap;
+
+drawTitleOutline(
+  titleCtx,
+  dashX,
+  25,
+  "Dash",
+  "400 italic 33px 'Changa One'"
+);
+
+titleCtx.fillStyle = "white";
+
+titleCtx.fillText(
+  "Dash",
+  dashX,
+  25
+);
+
+
+/* ==========================
+   TVRDÉ PIXELY
+   ========================== */
+
+makeHardPixels(titleCanvas);
+  
+}
+
+
+/* ==========================
    PLAY
    ========================== */
 
@@ -1152,22 +1405,29 @@ playButton.addEventListener(
     gameOverState = false;
     paused = false;
 
+    startScreen.classList.remove("gameOverMode");
 
-    /* Obnovení titulku */
+  /* ==========================
+   OBNOVENÍ START OBRAZOVKY
+   ========================== */
 
-    const gameTitle =
-      document.querySelector(".gameTitle");
+/* ReAll Dash zobrazit */
+gameTitle.style.display = "block";
 
-    gameTitle.innerHTML =
-      '<span class="reallText">ReAll</span><span class="runText"> run</span>';
+/* GAME OVER schovat */
+gameOverTitle.style.display = "none";
 
-    gameTitle.classList.remove("gameOver");
+/* Skóre schovat */
+gameOverScore.textContent = "";
+gameOverScore.style.display = "none";
 
-    document.querySelector(".gameSubtitle")
-      .style.display = "block";
+/* Text tlačítka */
+playButton.textContent = "PLAY";
 
-    gameOverScore.textContent = "";
-    gameOverScore.style.display = "none";
+/* ReAll Dash znovu vykreslit */
+document.fonts.ready.then(() => {
+  drawPixelText();
+});
 
 
     /* Reset */
@@ -1181,7 +1441,7 @@ playButton.addEventListener(
       performance.now();
 
     scoreDisplay.textContent = "0";
-
+    scoreDisplay.style.display = "block";
 
     /* Pauza */
 
@@ -1337,3 +1597,7 @@ window.addEventListener(
 
   }
 );
+
+document.fonts.ready.then(() => {
+  drawPixelText();
+});
