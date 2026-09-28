@@ -1520,10 +1520,11 @@ function updateFullscreenScale() {
   );
 
 
-  game.style.setProperty(
+  /*game.style.setProperty(
     "--game-scale",
     scale
   );
+  */
 }
 
 

@@ -692,10 +692,9 @@ background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAOCAY
   overflow: hidden;
 }
 
-
 /* Hra ve fullscreen */
 
-#gameViewport:fullscreen #game {
+/*#gameViewport:fullscreen #game {
   width: 800px;
   height: 400px;
 
@@ -725,6 +724,7 @@ background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAOCAY
 #net {
   isolation: isolate;
 }
+
 
 /* =========================================
    PIXELOVÝ OUTLINE HERních OBJEKTŮ
