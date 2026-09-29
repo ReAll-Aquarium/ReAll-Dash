@@ -528,7 +528,7 @@ if (groundX <= -512) {
 }
 
 ground.style.backgroundPosition =
-  `${Math.round(groundX)}px bottom`;
+  `${Math.round(groundX)}px 0`
 
 
   /* Odstranění starých */
