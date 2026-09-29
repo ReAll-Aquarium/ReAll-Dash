@@ -781,10 +781,3 @@ background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAOCAY
   width: 308px;
   height: 60px;
 }
-
-.gameTitleMain {
-    color: red !important;
-    font-family: Arial, sans-serif !important;
-    font-size: 50px !important;
-    -webkit-text-stroke: 0 !important;
-}
