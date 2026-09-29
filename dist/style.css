@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Poppins:wght@400;500;600;700;800&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=Press+Start+2P&family=Silkscreen:wght@400;700&family=Poppins:wght@400;500;600;700;800&display=swap');
 
 /* ==========================
    ZÁKLAD
@@ -17,7 +16,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Press Start 2P', monospace;
 }
 
 
@@ -309,18 +308,6 @@ background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAOCAY
   right: 20px;
 }
 
-/* ==========================
-   PAUSE NA STARTU / GAME OVER
-   ========================== */
-
-/*
-   Startovní obrazovka má normálně display:flex.
-   Jakmile JS nastaví display:none, toto pravidlo
-   přestane platit a pause se automaticky objeví.
-
-   Díky tomu není potřeba upravovat JS.
-*/
-
 #startScreen:not([style*="display: none"]) ~ #pauseButton {
   display: none;
 }
@@ -451,22 +438,20 @@ background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAOCAY
   display: none;
 
   margin-top: -40px;
-  margin-bottom: 5px;
+  margin-bottom: 18px;
 
   color: white;
 
-  font-family: 'Silkscreen', monospace;
-  font-size: 82px;
-  font-weight: 700;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 56px;
+  font-weight: 400;
 
-  letter-spacing: 2px;
+  letter-spacing: 0;
   line-height: 1;
 
   -webkit-text-stroke: 10px #111217;
   paint-order: stroke fill;
 }
-
-
 
 /* ==========================
    TLAČÍTKO HRÁT
@@ -485,8 +470,8 @@ background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAOCAY
   background: #ffffff;
   color: #08527D;
 
-  font-family: 'Silkscreen', monospace;
-  font-size: 40px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 25px;
   font-weight: 700;
 
   cursor: pointer;
@@ -526,15 +511,15 @@ background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAOCAY
 
   /* pixelový tmavý obrys */
   filter:
-    drop-shadow(4px 0 0 #111217)
-    drop-shadow(-4px 0 0 #111217)
-    drop-shadow(0 4px 0 #111217)
-    drop-shadow(0 -4px 0 #111217);
+    drop-shadow(5px 0 0 #111217)
+    drop-shadow(-5px 0 0 #111217)
+    drop-shadow(0 5px 0 #111217)
+    drop-shadow(0 -5px 0 #111217);
 }
 
 #playButtonFrame {
   position: relative;
-  top: -22px;
+  top: 2px;
 
   width: 368px;
   height: 68px;
@@ -587,8 +572,8 @@ background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAOCAY
 
   color: white;
 
-  font-family: 'Silkscreen', monospace;
-  font-size: 28px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 18px;
   font-weight: 700;
 
   z-index: 20;
@@ -604,16 +589,19 @@ background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAOCAY
 #gameOverScore {
   display: none;
 
-  margin-top: -10;
+  margin-top: 40px;
   margin-bottom: 25px;
 
   color: white;
 
-  font-family: 'Silkscreen', monospace;
-  font-size: 32px;
-  font-weight: 700;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 15px;
+  font-weight: 600;
 
-  -webkit-text-stroke: 2px #111217;
+  line-height: 0;
+  letter-spacing: 1px;
+
+  -webkit-text-stroke: 3px #111217;
   paint-order: stroke fill;
 }
 
@@ -690,11 +678,8 @@ background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAOCAY
 .gameTitle,
 #gameOverScore,
 #score {
-    text-shadow:
-        5px 0 0 #111217,
-        -5px 0 0 #111217,
-        0 5px 0 #111217,
-        0 -5px 0 #111217;
+    -webkit-text-stroke: 7px #111217;
+    paint-order: stroke fill;
 }
 
 /* =================================
@@ -702,34 +687,77 @@ background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAOCAY
    ================================= */
 
 .pauseIcon {
-    filter:
-        drop-shadow(4px 0 0 #111217)
-        drop-shadow(-4px 0 0 #111217)
-        drop-shadow(0 4px 0 #111217)
-        drop-shadow(0 -4px 0 #111217);
+  display: flex;
+  gap: 5px;
+
+  filter:
+    drop-shadow(5px 0 0 #111217)
+    drop-shadow(-5px 0 0 #111217)
+    drop-shadow(0 5px 0 #111217)
+    drop-shadow(0 -5px 0 #111217);
 }
 
+
 /* ==========================
-   REALL DASH – OBRÁZEK
+   GAME TITLE
    ========================== */
 
-#pixelTitle {
-  display: block;
+.gameTitle {
+  display: flex;
 
-  width: 512px;
-  height: 84px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-      background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAAAVCAYAAACOleY7AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsEAAA7BAbiRa+0AAAGHaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8P3hwYWNrZXQgYmVnaW49J++7vycgaWQ9J1c1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCc/Pg0KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyI+PHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj48cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0idXVpZDpmYWY1YmRkNS1iYTNkLTExZGEtYWQzMS1kMzNkNzUxODJmMWIiIHhtbG5zOnRpZmY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vdGlmZi8xLjAvIj48dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPjwvcmRmOkRlc2NyaXB0aW9uPjwvcmRmOlJERj48L3g6eG1wbWV0YT4NCjw/eHBhY2tldCBlbmQ9J3cnPz4slJgLAAACeklEQVRoQ+2aTXLCMAyFld6AdAH3P12zqHMEuhIVr0+y7DgB2n4zngHLkvUXm8kwiYic5vNVOlnLMuHcFjK+sD0zeh7M3l9h2pI42SF5WX/svqhTPj9un+f3ixVR2egYHgXmweLFeGsAm5gMNrGe8R5q/rCiRTq6PpJF/kdJjYhs7kHGT+bTG070YDc/zedrbdxrfxPJXo1HxVI+P36MCLcB5nm+GwgznA26to7ZfjSY1GgotTifAfcKwKKXUu6+K3jHKmhPyFo8kjxfLOzqifTsepS3XAGoWwNtZ5sBfcnqKcxPzLuylmVyTwAEGyKCOSHmKVJscL2JfgVaiqjXpA6Uj+Q0n6/pBsiSKWBmjccW3UeARdSHgA0PXOfp4Hcl0hnaAGh8fr+4x4+CCWqhplvbu0bGfiZGIacfA+U9OhmsTroBvN8ACjpik8ISZNd7ifaSi3s9Oz3+ZnVYflpwG6CUcjcQrzhbsEHXGkjxmmckrBiRTxamKw36FnvijMq/2wARuDELUo+vzDH26rTGh/nLEuWTzUniQe1qgBGgUxhArYHY3EhGnCyRj5Esg5cXRrTObYCocyKDCB5Zkd1/jsdtAKW3WL+l0KzZj4jrqAfGfxNYOaJr8hpWH3XRtoLrpGJHKnKV4ds32fhiSu2O0mVzo2TVE8CDGW3B0/eKL47Ms9PCiPteYT5m8QpWGu77VrobQEiXtgTvBWtZyzKxpxOJbET06mVpycdesBitX+kGGBVM1Ch23hY+0wQy0McevLjYnATzWbz9Wtn8j6C9wKLv7efI/dayPG1eLWtZpjcMHKnJlexxLQmbTM7mRsFss7kMqterfxTq3xfaciJwXpCLNQAAAABJRU5ErkJggg==");
+  transform: translateY(-38px);
 
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 512px 84px;
+  white-space: nowrap;
 
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
-  
-    transform: translateY(-50px);
-  
+  text-align: center;
+
+  z-index: 10;
+}
+
+
+/* ==========================
+   REALL PIXELS
+   ========================== */
+
+.gameTitleMain {
+  color: white;
+
+  font-family: 'Press Start 2P', monospace;
+  font-size: 50px;
+  font-weight: 400;
+
+  line-height: 0.85;
+
+  letter-spacing: 0px;
+
+  -webkit-text-stroke: 7px #111217;
+  paint-order: stroke fill;
+}
+
+
+/* ==========================
+   PŘEPLAV AKVÁRIUM
+   ========================== */
+
+.gameTitleSubtitle {
+  margin-top: 40px;
+
+  color: white;
+
+  font-family: 'Press Start 2P', monospace;
+  font-size: 15px;
+  font-weight: 600;
+
+  line-height: 0;
+
+  letter-spacing: 1px;
+
+  -webkit-text-stroke: 6px #111217;
+  paint-order: stroke fill;
 }
 
 
@@ -738,5 +766,15 @@ background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAOCAY
    ========================== */
 
 #startScreen.gameOverMode #playButtonFrame {
-  top: -12px;
+  top: 20px;
+}
+
+#startScreen.gameOverMode #playButton {
+  width: 300px;
+  height: 52px;
+}
+
+#startScreen.gameOverMode #playButtonFrame {
+  width: 308px;
+  height: 60px;
 }

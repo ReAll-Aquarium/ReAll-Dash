@@ -350,7 +350,7 @@ function stopJump() {
 
 function updateDiscus(time) {
 
-  /* Skóre */
+  /* score */
 
   if (
     started &&
@@ -1042,7 +1042,7 @@ gameTitle.style.display = "none";
 gameOverTitle.style.display = "block";
 
 gameOverScore.textContent =
-  "SKÓRE: " + finalScore;
+  "score: " + finalScore;
 
 gameOverScore.style.display = "block";
 
