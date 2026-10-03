@@ -30,10 +30,10 @@ const jumpHeight = 110;
 const ascentTime = 310;
 const descentTime = 280;
 
-let speed = 350;
-const startSpeed = 350;
-const maxSpeed = 600;
-const acceleration = 0.2;
+let speed = 300;
+const startSpeed = 300;
+const maxSpeed = 700;
+const acceleration = 0.3;
 
 const startMinSpawn = 850;
 const startMaxSpawn = 1500;
