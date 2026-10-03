@@ -787,6 +787,132 @@ requestAnimationFrame(checkFoodCollision);
 // KOLIZE
 // ==========================
 
+function pointInPolygon(x, y, polygon) {
+
+  let inside = false;
+
+  for (
+    let i = 0, j = polygon.length - 1;
+    i < polygon.length;
+    j = i++
+  ) {
+
+    const xi = polygon[i].x;
+    const yi = polygon[i].y;
+
+    const xj = polygon[j].x;
+    const yj = polygon[j].y;
+
+    const intersect =
+      ((yi > y) !== (yj > y)) &&
+      (
+        x <
+        (xj - xi) *
+        (y - yi) /
+        (yj - yi) +
+        xi
+      );
+
+    if (intersect) {
+      inside = !inside;
+    }
+  }
+
+  return inside;
+}
+
+
+// ==========================
+// BODY TERČOVCE
+// ==========================
+
+function getDiscusPoints(d) {
+
+  return [
+
+    // horní část těla
+    {
+      x: d.left + d.width * 0.30,
+      y: d.top + d.height * 0.20
+    },
+
+    {
+      x: d.left + d.width * 0.50,
+      y: d.top + d.height * 0.12
+    },
+
+    {
+      x: d.left + d.width * 0.68,
+      y: d.top + d.height * 0.20
+    },
+
+    // pravá část těla
+    {
+      x: d.left + d.width * 0.73,
+      y: d.top + d.height * 0.40
+    },
+
+    {
+      x: d.left + d.width * 0.73,
+      y: d.top + d.height * 0.60
+    },
+
+    // spodní část těla
+    {
+      x: d.left + d.width * 0.65,
+      y: d.top + d.height * 0.80
+    },
+
+    {
+      x: d.left + d.width * 0.50,
+      y: d.top + d.height * 0.88
+    },
+
+    {
+      x: d.left + d.width * 0.32,
+      y: d.top + d.height * 0.80
+    },
+
+    // levá část těla
+    {
+      x: d.left + d.width * 0.27,
+      y: d.top + d.height * 0.60
+    },
+
+    {
+      x: d.left + d.width * 0.27,
+      y: d.top + d.height * 0.40
+    },
+
+    // střed
+    {
+      x: d.left + d.width * 0.50,
+      y: d.top + d.height * 0.50
+    }
+
+  ];
+}
+
+
+// ==========================
+// PŘEVOD NORMALIZOVANÉHO
+// POLYGONU NA OBRAZOVKU
+// ==========================
+
+function makePolygon(rect, points) {
+
+  return points.map(p => ({
+    x: rect.left + p.x * rect.width,
+    y: rect.top + p.y * rect.height
+  }));
+
+}
+
+
+// ==========================
+// KOLIZE
+// ==========================
+
 function checkCollision() {
 
   if (
@@ -797,6 +923,10 @@ function checkCollision() {
 
     const d =
       discus.getBoundingClientRect();
+
+    const discusPoints =
+      getDiscusPoints(d);
+
 
     for (const o of obstacles) {
 
@@ -811,18 +941,6 @@ function checkCollision() {
       if (
         o.element.classList.contains("plant")
       ) {
-
-        /*
-          Rostlina má nepravidelný tvar.
-          Proto nepoužíváme celý obdélník
-          70 × 110 px.
-
-          Body jsou uvnitř skutečného
-          tvaru rostliny.
-
-          Okolo obrázku je přibližně
-          5 px bezpečnostní mezera.
-        */
 
         const plantPolygon = [
 
@@ -851,151 +969,24 @@ function checkCollision() {
 
           { x: 0.70, y: 0.78 },
           { x: 0.64, y: 1.00 }
+
         ];
 
-
-        // ==========================
-        // PŘEVOD BODŮ NA OBRAZOVKU
-        // ==========================
-
-        const polygon = plantPolygon.map(p => ({
-          x: r.left + p.x * r.width,
-          y: r.top + p.y * r.height
-        }));
+        const polygon =
+          makePolygon(r, plantPolygon);
 
 
-        // ==========================
-        // TEST BODU V POLYGONU
-        // ==========================
-
-        function pointInPolygon(x, y, polygon) {
-
-          let inside = false;
-
-          for (
-            let i = 0, j = polygon.length - 1;
-            i < polygon.length;
-            j = i++
-          ) {
-
-            const xi = polygon[i].x;
-            const yi = polygon[i].y;
-
-            const xj = polygon[j].x;
-            const yj = polygon[j].y;
-
-
-            const intersect =
-              ((yi > y) !== (yj > y)) &&
-              (
-                x <
-                (xj - xi) *
-                (y - yi) /
-                (yj - yi) +
-                xi
-              );
-
-            if (intersect) {
-
-              inside = !inside;
-            }
-          }
-
-          return inside;
-        }
-
-
-        // ==========================
-// BODY TERČOVCE
-// ==========================
-
-const discusPoints = [
-
-  // horní část těla
-  {
-    x: d.left + d.width * 0.30,
-    y: d.top + d.height * 0.20
-  },
-
-  {
-    x: d.left + d.width * 0.50,
-    y: d.top + d.height * 0.12
-  },
-
-  {
-    x: d.left + d.width * 0.68,
-    y: d.top + d.height * 0.20
-  },
-
-  // pravá část těla – ne až úplně do ocasu
-  {
-    x: d.left + d.width * 0.73,
-    y: d.top + d.height * 0.40
-  },
-
-  {
-    x: d.left + d.width * 0.73,
-    y: d.top + d.height * 0.60
-  },
-
-  // spodní část těla
-  {
-    x: d.left + d.width * 0.65,
-    y: d.top + d.height * 0.80
-  },
-
-  {
-    x: d.left + d.width * 0.50,
-    y: d.top + d.height * 0.88
-  },
-
-  {
-    x: d.left + d.width * 0.32,
-    y: d.top + d.height * 0.80
-  },
-
-  // levá část těla
-  {
-    x: d.left + d.width * 0.27,
-    y: d.top + d.height * 0.60
-  },
-
-  {
-    x: d.left + d.width * 0.27,
-    y: d.top + d.height * 0.40
-  },
-
-  // střed
-  {
-    x: d.left + d.width * 0.50,
-    y: d.top + d.height * 0.50
-  }
-];
-
-
-        // ==========================
-        // KOLIZE S ROSTLINOU
-        // ==========================
-
-        let plantCollision = false;
-
-        for (const point of discusPoints) {
-
-          if (
+        const collision =
+          discusPoints.some(point =>
             pointInPolygon(
               point.x,
               point.y,
               polygon
             )
-          ) {
-
-            plantCollision = true;
-            break;
-          }
-        }
+          );
 
 
-        if (plantCollision) {
+        if (collision) {
 
           endGame(
             "Terčovec se schoval mezi rostliny a odmítá vyplout!"
@@ -1004,61 +995,196 @@ const discusPoints = [
           break;
         }
 
+        continue;
+      }
 
-        // Rostlina je vyřešena,
-        // nepoužívat na ni obdélníkovou kolizi.
+
+      // ==========================
+      // KÁMEN
+      // ==========================
+
+      if (
+        o.element.classList.contains("rock")
+      ) {
+
+        const rockPolygon = [
+
+          { x: 0.25, y: 0.02 },
+          { x: 0.55, y: 0.02 },
+          { x: 0.78, y: 0.18 },
+
+          { x: 0.88, y: 0.36 },
+          { x: 0.94, y: 0.65 },
+
+          { x: 1.00, y: 0.88 },
+          { x: 0.96, y: 1.00 },
+
+          { x: 0.05, y: 1.00 },
+          { x: 0.00, y: 0.83 },
+
+          { x: 0.08, y: 0.50 },
+          { x: 0.12, y: 0.25 }
+
+        ];
+
+        const polygon =
+          makePolygon(r, rockPolygon);
+
+
+        const collision =
+          discusPoints.some(point =>
+            pointInPolygon(
+              point.x,
+              point.y,
+              polygon
+            )
+          );
+
+
+        if (collision) {
+
+          endGame(
+            "Au! Terčovec narazil do kamene!"
+          );
+
+          break;
+        }
 
         continue;
       }
 
 
       // ==========================
-      // OSTATNÍ PŘEKÁŽKY
+      // SÍŤKA
       // ==========================
 
-      const overlapX =
-        Math.min(d.right, r.right) -
-        Math.max(d.left, r.left);
+      if (
+        o.element.classList.contains("net")
+      ) {
 
-      const overlapY =
-        Math.min(d.bottom, r.bottom) -
-        Math.max(d.top, r.top);
+        /*
+          .net má výšku 2303 px,
+          ale samotný obrázek síťky
+          má jen 303 px a je přichycen
+          ke spodku.
+
+          Proto kolizi počítáme jen
+          přes skutečně viditelný obrázek.
+        */
+
+        const visualScale =
+          r.width / 130;
+
+        const visualHeight =
+          303 * visualScale;
+
+        const netRect = {
+
+          left: r.left,
+
+          top:
+            r.bottom - visualHeight,
+
+          width:
+            r.width,
+
+          height:
+            visualHeight,
+
+          right:
+            r.right,
+
+          bottom:
+            r.bottom
+        };
 
 
-      const collision =
-        overlapX >= 35 &&
-        overlapY >= 35;
+        // rukojeť / tyčka síťky
+        const netHandlePolygon = [
+
+          { x: 0.24, y: 0.00 },
+          { x: 0.57, y: 0.00 },
+
+          { x: 0.57, y: 0.15 },
+          { x: 0.44, y: 0.20 },
+
+          { x: 0.44, y: 0.70 },
+          { x: 0.38, y: 0.70 },
+
+          { x: 0.38, y: 0.20 },
+          { x: 0.24, y: 0.15 }
+
+        ];
 
 
-      if (collision) {
+        // košík síťky
+        const netBasketPolygon = [
 
-        if (
-          o.element.classList.contains("rock")
-        ) {
+          { x: 0.05, y: 0.70 },
+          { x: 0.68, y: 0.70 },
+          { x: 0.86, y: 0.77 },
 
-          endGame(
-            "Au! Terčovec narazil do kamene!"
+          { x: 1.00, y: 0.86 },
+          { x: 0.96, y: 0.94 },
+
+          { x: 0.82, y: 0.98 },
+          { x: 0.15, y: 1.00 },
+
+          { x: 0.03, y: 0.94 },
+          { x: 0.00, y: 0.82 }
+
+        ];
+
+
+        const handlePolygon =
+          makePolygon(
+            netRect,
+            netHandlePolygon
           );
-        }
 
-        else if (
-          o.element.classList.contains("net")
-        ) {
+        const basketPolygon =
+          makePolygon(
+            netRect,
+            netBasketPolygon
+          );
+
+
+        const collision =
+          discusPoints.some(point =>
+            pointInPolygon(
+              point.x,
+              point.y,
+              handlePolygon
+            ) ||
+            pointInPolygon(
+              point.x,
+              point.y,
+              basketPolygon
+            )
+          );
+
+
+        if (collision) {
 
           endGame(
             "Terčovec byl chycen do síťky a míří k pokladně!"
           );
+
+          break;
         }
 
-        break;
+        continue;
       }
+
     }
   }
+
 
   requestAnimationFrame(
     checkCollision
   );
 }
+
 
 requestAnimationFrame(
   checkCollision
